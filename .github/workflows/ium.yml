@@ -21,21 +21,24 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         
-      - name: Build Docker image
+      - name: Echo epochs
         run: |
           echo ${{ github.event.inputs.epochs }}
+
+      - name: Build Docker image
+        run: |
           docker build -t mamba .
         working-directory: ./
 
       - name: Run Docker image (train process)
         run: |
-          docker run mamba python src/main.py  -e=${{ github.event.inputs.epochs }} --train
+          docker run mamba python src/main.py  -e=${{ github.event.inputs.epochs }} --train --data_len=100
 
       - name: Copy model.pt
         run: |
 
 
-          docker cp $(docker ps -lq):results/model.pt .
+          docker cp $(docker ps -lq):/app/results/model.pt .
 
       - name: Archive Model
         uses: actions/upload-artifact@v3
@@ -63,5 +66,5 @@ jobs:
         run: |
           docker build -t mamba .
           docker cp model.pt $(docker ps -lq):results/model.pt
-          docker run mamba python src/main.py --test
+          docker run mamba python src/main.py --test --data_len=100
         working-directory: ./
