@@ -19,16 +19,17 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v3
-      
-      - name: Build Docker image
+        
+        - name: Build Docker image
         run: |
+          echo ${{ github.event.inputs.epochs }}
+          echo "${{ github.event.inputs.epochs }}"
           docker build -t mamba .
         working-directory: ./
 
       - name: Run Docker image (train process)
         run: |
-          echo ${{ github.event.inputs.epochs }}
-          docker run mamba python src/main.py  -e=${{ github.event.inputs.epochs }} 
+          docker run mamba python src/main.py  -e="${{ github.event.inputs.epochs }}"
 
       - name: Copy model.pt
         run: |
