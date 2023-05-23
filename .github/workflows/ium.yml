@@ -1,9 +1,6 @@
 name: IUM s424714
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
     inputs:
       epochs:
@@ -11,6 +8,9 @@ on:
         required: false
         type: number
         default: 1
+  push:
+    branches:
+      - master
 jobs:
   train:
     runs-on: ubuntu-latest
@@ -23,21 +23,24 @@ jobs:
         
       - name: Build Docker image
         run: |
-          echo ${{ github.event.inputs.epochs }}
-          echo "${{ github.event.inputs.epochs }}"
-          echo "${{ inputs.epochs }}"
           docker build -t mamba .
         working-directory: ./
 
       - name: Run Docker image (train process)
         run: |
-          docker run mamba python src/main.py  -e="${{ github.event.inputs.epochs }}"
+          docker run mamba python src/main.py  -e="${{ github.event.inputs.epochs }} --train"
 
       - name: Copy model.pt
         run: |
 
 
           docker cp $(docker ps -lq):results/model.pt .
+
+      - name: Archive Model
+        uses: actions/upload-artifact@v3
+        with:
+          name: model
+          path: model.pt
       
   test:
     runs-on: ubuntu-latest
@@ -45,3 +48,19 @@ jobs:
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: model
+          path: ./
+
+      - name: Build Docker image
+        run: |
+          docker build -t mamba .
+          docker cp model.pt $(docker ps -lq):results/model.pt
+          docker run mamba python src/main.py --test"
+        working-directory: ./
