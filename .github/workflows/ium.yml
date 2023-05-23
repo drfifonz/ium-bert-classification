@@ -8,9 +8,9 @@ on:
         required: false
         type: number
         default: 1
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
 jobs:
   train:
     runs-on: ubuntu-latest
@@ -23,13 +23,13 @@ jobs:
         
       - name: Build Docker image
         run: |
-          echo "${{ github.event.inputs.epochs }}"
+          echo ${{ github.event.inputs.epochs }}
           docker build -t mamba .
         working-directory: ./
 
       - name: Run Docker image (train process)
         run: |
-          docker run mamba python src/main.py  -e="${{ github.event.inputs.epochs }}" --train
+          docker run mamba python src/main.py  -e=${{ github.event.inputs.epochs }} --train
 
       - name: Copy model.pt
         run: |
@@ -63,5 +63,5 @@ jobs:
         run: |
           docker build -t mamba .
           docker cp model.pt $(docker ps -lq):results/model.pt
-          docker run mamba python src/main.py --test"
+          docker run mamba python src/main.py --test
         working-directory: ./
