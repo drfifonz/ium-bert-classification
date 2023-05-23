@@ -9,7 +9,7 @@ on:
       epochs:
         description: 'Epochs'
         required: true
-        default: 1
+        default: "1"
 jobs:
   train:
     runs-on: ubuntu-latest
@@ -27,6 +27,7 @@ jobs:
 
       - name: Run Docker image (train process)
         run: |
+          echo ${{ github.event.inputs.epochs }}
           docker run mamba python src/main.py  -e=${{ github.event.inputs.epochs }} 
 
       - name: Copy model.pt
