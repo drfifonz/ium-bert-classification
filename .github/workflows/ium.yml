@@ -25,7 +25,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t mamba .
+          ls -la
+          docker build -t dckrimg .
         working-directory: ./
 
       - name: Run Docker image (train process)
