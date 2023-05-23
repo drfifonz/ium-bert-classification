@@ -1,19 +1,33 @@
 name: IUM s424714
 
 on:
-    push:
-        branches:
-            - master
-    workflow_dispatch:
-        inputs:
-            training_params:
-            description: 'Epochs'
-            required: true
-            default: '1'
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: 'Epochs'
+        required: true
+        default: '1'
+jobs:
+  checkout_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    jobs:
-        checkout_repo:
-            runs-on: ubuntu-latest
-            steps:
-                - name: Checkout repo
-                  uses: actions/check
+      - name: Build Docker image
+        run: |
+          docker build -t mamba .
+          working-directory: ./
+
+      - name: Run Docker image (train process)
+        run: |
+          docker run mamba python src/main.py  -e=${{ github.event.inputs.epochs }} 

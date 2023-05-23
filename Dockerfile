@@ -19,6 +19,7 @@ ENV PATH /opt/conda/envs/ium/bin:$PATH
 RUN useradd -r -u 111 jenkins
 
 COPY src ./src
+COPY data ./data
 #make dir for data
 RUN mkdir -p ./data; mkdir -p ./results
 
