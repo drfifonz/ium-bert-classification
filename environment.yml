@@ -1,0 +1,23 @@
+name: ium
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.10
+  - kaggle
+  - ca-certificates
+  - openssl
+  - pandas
+  - certifi
+  - scikit-learn
+  - pytorch
+  - pytorch-cuda=11.8
+  - transformers
+  - matplotlib
+  - pymongo
+  - dvc
+  - dvc-ssh 
+  - pip
+  - pip:
+      - sacred==0.8.4
