@@ -11,23 +11,19 @@ on:
         required: true
         default: '1'
 jobs:
-  checkout_repo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      
   train:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      
       - name: Build Docker image
         run: |
-          ls
           docker build -t mamba .
-        # working-directory: ./
+        working-directory: ./
 
       - name: Run Docker image (train process)
         run: |
