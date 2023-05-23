@@ -1,14 +1,14 @@
 name: IUM s424714
 
 on:
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
   workflow_dispatch:
     inputs:
       epochs:
         description: 'Epochs'
-        required: true
+        required: false
         type: number
         default: 1
 jobs:
