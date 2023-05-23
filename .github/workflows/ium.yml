@@ -23,12 +23,13 @@ jobs:
         
       - name: Build Docker image
         run: |
+          echo "${{ github.event.inputs.epochs }}"
           docker build -t mamba .
         working-directory: ./
 
       - name: Run Docker image (train process)
         run: |
-          docker run mamba python src/main.py  -e="${{ github.event.inputs.epochs }} --train"
+          docker run mamba python src/main.py  -e="${{ github.event.inputs.epochs }}" --train
 
       - name: Copy model.pt
         run: |
