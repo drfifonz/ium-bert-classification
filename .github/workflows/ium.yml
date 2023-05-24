@@ -72,6 +72,6 @@ jobs:
         
       - name: Copy model and test it
         run: |
-          docker cp model.pt mambaContainer:results/model.pt
+          docker cp model.pt mambaContainer:./results/model.pt
           docker exec mambaContainer python src/main.py --test --data_len=100
         working-directory: ./
