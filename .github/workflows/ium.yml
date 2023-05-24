@@ -5,12 +5,12 @@ on:
     inputs:
       epochs:
         description: 'Epochs'
-        required: false
+        required: true
         type: number
         default: 1
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
 jobs:
   train:
     runs-on: ubuntu-latest
