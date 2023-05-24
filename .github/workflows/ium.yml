@@ -65,6 +65,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t mamba .
+          docker run mamba
           docker cp model.pt $(docker ps -lq):results/model.pt
-          docker run mamba python src/main.py --test --data_len=100
+          docker exec -it $(docker ps -lq) python src/main.py --test --data_len=100
         working-directory: ./
