@@ -1,16 +1,17 @@
 name: IUM s424714
 
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       epochs:
         description: 'Epochs'
         required: true
-        type: number
-        default: 1
-  push:
-    branches:
-      - master
+#         type: number
+        default: "1"
+
 jobs:
   train:
     runs-on: ubuntu-latest
